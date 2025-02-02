@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -17,16 +16,21 @@ func main() {
 }
 
 func isSecurePassword(rw http.ResponseWriter, r* http.Request) {
-	var request Request
+	if r.Method != http.MethodPost {
+		rw.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
 
+	var request Request
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	isSecure := checkPassword(request.Password)
-
-	fmt.Println(isSecure)
+	response := map[string]bool{"secure": isSecure}
+	rw.Header().Set("Content-Type", "apllication/json")
+	json.NewEncoder(rw).Encode(response)
 }
 
 func checkPassword(password string) bool {
