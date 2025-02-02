@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 type Request struct {
@@ -38,26 +39,21 @@ func checkPassword(password string) bool {
 		return false
 	}
 
-	var numerico, especial, maisculo, minusculo bool = false, false, false, false
+	var hasNumber, hasSpecialChar, hasUpperCase, hasLowerCase bool = false, false, false, false
+	especialChar := "!@#$%^&*()_+{}[]:;<>,.?/~`"
 
 	for _, char := range password {
-		if (char < 48 || char > 57) && (char < 65 || char > 90) && (char < 97 || char > 122) {
-			especial = true
+		if char >= 'A' && char <= 'Z' {
+			hasUpperCase = true
+		} else if char >= 'a' && char <= 'z' {
+			hasLowerCase = true
+		} else if char >= '0' && char <= '9' {
+			hasNumber = true
+		} else if(strings.ContainsAny(password, especialChar)) {
+			hasSpecialChar = true	
 		}
 
-		if char >= 65 && char <= 90 {
-			maisculo = true
-		}
-
-		if char >= 97 && char <= 122 {
-			minusculo = true
-		}
-
-		if char >= 48 && char <= 57 {
-			numerico = true
-		}
-
-		if especial && maisculo && minusculo && numerico {
+		if hasSpecialChar && hasUpperCase && hasLowerCase && hasNumber {
 			return true
 		}
 	}
