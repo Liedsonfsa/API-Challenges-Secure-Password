@@ -18,11 +18,11 @@ func CheckPassword(password string) []string {
 	}
 
 	if !hasNumber(password) {
-		errors = append(errors, "Sua senha precisa ter no mínimo um número!")
+		errors = append(errors, "Sua senha precisa ter ao menos um número!")
 	}
 
 	if !hasSpecialChar(password) {
-		errors = append(errors, "Sua senha precisa ter no mínimo um carater especial!")
+		errors = append(errors, "Sua senha precisa ter ao menos um carater especial!")
 	}
 
 	return errors

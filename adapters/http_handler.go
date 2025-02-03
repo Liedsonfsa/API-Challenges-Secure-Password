@@ -20,14 +20,19 @@ func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
+		response := map[string]string{
+			"error": "O corpo da requisição contém um JSON inválido ou malformado.",
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(rw).Encode(response)
 		return
 	}
 
 	validationErrors := core.CheckPassword(request.Password)
 
-	rw.Header().Set("Content-Type", "application/json")
 	if len(validationErrors) > 0 {
 		rw.WriteHeader(http.StatusBadRequest)
+		rw.Header().Set("Content-Type", "application/json")
 		response := map[string]interface{}{
 			"errors": validationErrors,
 		}
