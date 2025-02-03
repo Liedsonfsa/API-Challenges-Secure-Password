@@ -2,7 +2,6 @@ package adapters
 
 import (
 	"encoding/json"
-	// "log"
 	"net/http"
 	"secure-password/core"
 )
@@ -24,10 +23,15 @@ func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 		return
 	}
 
-	isSecure := core.CheckPassword(request.Password)
+	validationErrors := core.CheckPassword(request.Password)
 
-	if !isSecure {
+	rw.Header().Set("Content-Type", "application/json")
+	if len(validationErrors) > 0 {
 		rw.WriteHeader(http.StatusBadRequest)
+		response := map[string]interface{}{
+			"errors": validationErrors,
+		}
+		json.NewEncoder(rw).Encode(response)
 		return
 	}
 

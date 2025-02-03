@@ -2,29 +2,60 @@ package core
 
 import "strings"
 
-func CheckPassword(password string) bool {
+func CheckPassword(password string) []string {
+	var errors []string
 	if len(password) < 8 {
-		return false
+		errors = append(errors, "A sua senha deve conter no mínimo 8 caracteres!")
+		return errors
 	}
 
-	var hasNumber, hasSpecialChar, hasUpperCase, hasLowerCase bool = false, false, false, false
-	especialChar := "!@#$%^&*()_+{}[]:;<>,.?/~`"
-
-	for _, char := range password {
-		if char >= 'A' && char <= 'Z' {
-			hasUpperCase = true
-		} else if char >= 'a' && char <= 'z' {
-			hasLowerCase = true
-		} else if char >= '0' && char <= '9' {
-			hasNumber = true
-		} else if(strings.ContainsAny(password, especialChar)) {
-			hasSpecialChar = true	
-		}
-
-		if hasSpecialChar && hasUpperCase && hasLowerCase && hasNumber {
-			return true
-		}
+	if !hasUpperCase(password) {
+		errors = append(errors, "Sua senha precisa ter ao menos um caracter maiúsculo!")
 	}
 
-	return false
+	if !hasLowerCase(password) {
+		errors = append(errors, "Sua senha precisa ter ao menos um caracter minúsculo!")
+	}
+
+	if !hasNumber(password) {
+		errors = append(errors, "Sua senha precisa ter no mínimo um número!")
+	}
+
+	if !hasSpecialChar(password) {
+		errors = append(errors, "Sua senha precisa ter no mínimo um carater especial!")
+	}
+
+	return errors
+}
+
+func hasUpperCase(password string) bool {
+    for _, char := range password {
+        if char >= 'A' && char <= 'Z' {
+            return true
+        }
+    }
+    return false
+}
+
+func hasLowerCase(password string) bool {
+    for _, char := range password {
+        if char >= 'a' && char <= 'z' {
+            return true
+        }
+    }
+    return false
+}
+
+func hasNumber(password string) bool {
+    for _, char := range password {
+        if char >= '0' && char <= '9' {
+            return true
+        }
+    }
+    return false
+}
+
+func hasSpecialChar(password string) bool {
+    especiais := "!@#$%^&*()_+{}[]:;<>,.?/~`"
+    return strings.ContainsAny(password, especiais)
 }
