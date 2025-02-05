@@ -4,6 +4,7 @@ import "strings"
 
 func CheckPassword(password string) []string {
 	var errors []string
+    
 	if len(password) < 8 {
 		errors = append(errors, "A sua senha deve conter no mínimo 8 caracteres!")
 		return errors
@@ -22,7 +23,7 @@ func CheckPassword(password string) []string {
 	}
 
 	if !hasSpecialChar(password) {
-		errors = append(errors, "Sua senha precisa ter ao menos um carater especial!")
+		errors = append(errors, "Sua senha precisa ter ao menos um caracter especial!")
 	}
 
 	return errors
