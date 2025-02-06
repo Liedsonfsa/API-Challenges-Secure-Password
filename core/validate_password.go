@@ -2,6 +2,7 @@ package core
 
 import "strings"
 
+// CheckPassword verifica se a senha obedece a todos os critérios de validação
 func CheckPassword(password string) []string {
 	var errors []string
     
@@ -29,6 +30,7 @@ func CheckPassword(password string) []string {
 	return errors
 }
 
+// hasUpperCase verifica a existência de caracteres maiúsculos
 func hasUpperCase(password string) bool {
     for _, char := range password {
         if char >= 'A' && char <= 'Z' {
@@ -38,6 +40,7 @@ func hasUpperCase(password string) bool {
     return false
 }
 
+// hasLowerCase verifica a existência de caracteres minúsculos
 func hasLowerCase(password string) bool {
     for _, char := range password {
         if char >= 'a' && char <= 'z' {
@@ -47,6 +50,7 @@ func hasLowerCase(password string) bool {
     return false
 }
 
+// hasNumber verifica a existência de caracteres númericos
 func hasNumber(password string) bool {
     for _, char := range password {
         if char >= '0' && char <= '9' {
@@ -56,6 +60,7 @@ func hasNumber(password string) bool {
     return false
 }
 
+// hasSpecialChar verifia a existência de caracteres especiais
 func hasSpecialChar(password string) bool {
     especiais := "!@#$%^&*()_+{}[]:;<>,.?/~`"
     return strings.ContainsAny(password, especiais)

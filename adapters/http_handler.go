@@ -8,6 +8,7 @@ import (
 
 type HTTPHandler struct {}
 
+// ServeHTTP recebe a requisição, decodifica e envia a senha para a validação. Por fim, define o status da requisição e retorna eventuais erros.
 func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 	if r.Method != http.MethodPost {
 		rw.WriteHeader(http.StatusMethodNotAllowed)
@@ -20,9 +21,11 @@ func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
+		
 		response := map[string]string{
 			"error": "O corpo da requisição contém um JSON inválido ou malformado.",
 		}
+
 		rw.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(response)
 		return
@@ -32,9 +35,11 @@ func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 
 	if len(validationErrors) > 0 {
 		rw.WriteHeader(http.StatusBadRequest)
+		
 		response := map[string][]string{
 			"error": validationErrors,
 		}
+
 		rw.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(response)
 		return
