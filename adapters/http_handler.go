@@ -32,10 +32,10 @@ func (h *HTTPHandler) ServeHTTP(rw http.ResponseWriter, r* http.Request) {
 
 	if len(validationErrors) > 0 {
 		rw.WriteHeader(http.StatusBadRequest)
-		rw.Header().Set("Content-Type", "application/json")
 		response := map[string][]string{
 			"error": validationErrors,
 		}
+		rw.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(response)
 		return
 	}
